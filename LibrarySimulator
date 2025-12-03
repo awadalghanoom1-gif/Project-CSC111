@@ -1,0 +1,161 @@
+package project_phase_1;
+
+import java.util.Scanner;
+
+public class LibrarySimulator {
+
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+        final String ADMIN_PASSWORD = 123456;
+        // create objects
+        Member m1 = new Member(446109027, "Awad", 0);
+        Member m2 = new Member(446104638, "Abdulaziz", 0);
+        Member m3 = new Member(446102143, "Bader", 0);
+
+        boolean session_running = true;
+
+        while (session_running) {
+
+            System.out.println("\nWelcome to the Library");
+            System.out.println("1. Login as user");
+            System.out.println("2. Login as admin");
+            System.out.println("3. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = input.nextInt();
+
+            // User login
+            if (choice == 1) {
+
+                System.out.println("Select user:");
+                System.out.println("1. 446109027, Awad");
+                System.out.println("2. 446104638, Abdulaziz");
+                System.out.println("3. 446102143, Bader");
+                System.out.print("Enter user number: ");
+                int user = input.nextInt();
+
+                Member current = null;
+
+                if (user == 1) current = m1;
+                else if (user == 2) current = m2;
+                else if (user == 3) current = m3;
+                else {
+                    System.out.println("Invalid user");
+                    continue;
+                }
+
+                boolean user_menu = true;
+                
+                // User menu
+                while (user_menu) {
+
+                    System.out.println("\nUser Menu");
+                    System.out.println("1. View borrowed books");
+                    System.out.println("2. Borrow a book");
+                    System.out.println("3. Return a book");
+                    System.out.println("4. View session summary");
+                    System.out.println("5. Logout");
+                    System.out.print("Enter your choice: ");
+                    int action = input.nextInt();
+
+                    if (action == 1) {
+                        current.viewBorrowedCount();
+                    }
+
+                    else if (action == 2) {
+                        if (current.borrowOne()) {
+                            System.out.println("Book borrowed successfully");
+                        } else {
+                            System.out.println("You cannot borrow more than 5 books");
+                        }
+                    }
+
+                    else if (action == 3) {
+                        if (current.returnOne()) {
+                            System.out.println("Book returned successfully");
+                        } else {
+                            System.out.println("You have no books to return");
+                        }
+                    }
+
+                    else if (action == 4) {
+                        current.displayStatistics();
+                    }
+
+                    else if (action == 5) {
+                        current.reset();
+                        user_menu = false;
+                        System.out.println("Logging out");
+                    }
+
+                    else {
+                        System.out.println("Invalid choice");
+                    }
+                }
+            }
+
+            // Admin login
+            else if (choice == 2) {
+            	System.out.print("Enter admin password: ");
+                String pass = input.next();
+
+                if (!pass.equals(ADMIN_PASSWORD)) {
+                    System.out.println("Incorrect password. Access denied.");
+                    continue;
+                }
+            	
+
+                boolean admin_menu = true;
+                
+                // Admin menu
+                while (admin_menu) {
+
+                    System.out.println("\nAdministrator Menu:");
+                    System.out.println("1. View total revenue collected");
+                    System.out.println("2. View most frequent operation");
+                    System.out.println("3. Return to main menu");
+                    System.out.print("Enter your choice: ");
+                    int admin_choice = input.nextInt();
+
+                    if (admin_choice == 1) {
+                        System.out.printf("Total revenue collected: $%.2f\n", Member.TotalRevenue);
+                    }
+
+                    else if (admin_choice == 2) {
+
+                        if (Member.TotalBorrows > Member.TotalReturns) {
+                            System.out.println("Most frequent operation: borrow");
+                        }
+                        else if (Member.TotalReturns > Member.TotalBorrows) {
+                            System.out.println("Most frequent operation: return");
+                        }
+                        else {
+                            System.out.println("Most frequent operations: borrow and return (equal frequency)");
+                        }
+                    }
+
+                    else if (admin_choice == 3) {
+                        admin_menu = false;
+                        System.out.println("Returning to main menu");
+                    }
+
+                    else {
+                        System.out.println("Invalid choice");
+                    }
+                }
+            }
+
+            // exiting session
+            else if (choice == 3) {
+                session_running = false;
+                System.out.println("Session finished");
+            }
+
+            else {
+                System.out.println("Invalid choice");
+            }
+        }
+
+        input.close();
+    }
+}
