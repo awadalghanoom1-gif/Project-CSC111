@@ -1,0 +1,99 @@
+// Awad Nasser A Alghanoom: 446109027
+// Abdulaziz mazen ALAUSHAN: 446104638
+// Bader Mohammed Almuwainie: 446102143
+package project_phase_1;
+
+public class Member {
+
+    // instance attributes
+    private int id;
+    private String name;
+    private int borrowedCount;
+
+    private int numViewBorrowed;
+    private int numBorrows;
+    private int numReturns;
+    private double sessionFees;
+
+    
+    public static double TotalRevenue = 0;
+    public static int TotalViewBorrowed = 0;
+    public static int TotalBorrows = 0;
+    public static int TotalReturns = 0;
+
+    // constructor
+    public Member(int id, String name, int borrowedCount) {
+        this.id = id;
+        this.name = name;
+        this.borrowedCount = borrowedCount;
+    }
+
+    private boolean canBorrow() {
+        return borrowedCount < 5;
+    }
+
+    private boolean canReturn() {
+        return borrowedCount > 0;
+    }
+
+    // the view of borrowed count
+    public void viewBorrowedCount() {
+        numViewBorrowed++;
+        TotalViewBorrowed++;
+        System.out.println("You currently have " + borrowedCount + " books.");
+    }
+
+    // borrowing book
+    public boolean borrowOne() {
+        if (canBorrow()) {
+            borrowedCount++;
+            numBorrows++;
+            TotalBorrows++;
+            sessionFees += 0.5;
+            TotalRevenue += 0.5;
+            return true;
+        }
+        return false;
+    }
+
+    // returning book
+    public boolean returnOne() {
+        if (canReturn()) {
+            borrowedCount--;
+            numReturns++;
+            TotalReturns++;
+            return true;
+        }
+        return false;
+    }
+
+    // displaying the session statistics/summary
+    public void displayStatistics() {
+        System.out.println("\nSession Summary:");
+        System.out.println("Books viewed: " + numViewBorrowed);
+        System.out.println("Books borrowed: " + numBorrows);
+        System.out.println("Books returned: " + numReturns);
+        System.out.printf("Fees incurred: $%.2f\n", sessionFees);
+    }
+
+    // resets sessions stats when logging out
+    public void reset() {
+        numViewBorrowed = 0;
+        numBorrows = 0;
+        numReturns = 0;
+        sessionFees = 0;
+    }
+
+    // getters and setters
+    public int getBorrowedCount() {
+        return borrowedCount;
+    }
+
+    public void setBorrowedCount(int borrowedCount) {
+        this.borrowedCount = borrowedCount;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
